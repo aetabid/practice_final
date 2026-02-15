@@ -2,3 +2,4 @@ __pycache__
 .env
 .learn.DS_Store
 src/temp_*.csv
+.env
