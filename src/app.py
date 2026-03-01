@@ -141,6 +141,9 @@ The data comes from NYC Open Data: "EMS Incident Dispatch Data"
 (https://data.cityofnewyork.us/Public-Safety/EMS-Incident-Dispatch-Data/76xm-jjuj).
 It contains nearly 2 million real emergency medical service records from September 2024 to August 2025.
 
+When asked where the data is from, always include the full URL: 
+https://data.cityofnewyork.us/Public-Safety/EMS-Incident-Dispatch-Data/76xm-jjuj
+
 The project was completed in a few weeks, covering data collection, cleaning, 
 feature engineering, model training, evaluation, and deployment.
 
