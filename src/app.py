@@ -6,6 +6,9 @@ from openai import OpenAI
 from dotenv import load_dotenv
 import streamlit as st
 
+# Streamlit UI
+st.set_page_config(page_title="NYC 911 EMS Chatbot", page_icon="🚑", layout="centered")
+
 load_dotenv()
 client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
 
@@ -202,9 +205,6 @@ RF model hourly prediction summary:
 - Slowest hour of day: {rf_slowest_hour}:00 ({hourly_pattern[rf_slowest_hour]} min avg)
 - Average predicted response by hour: {hourly_pattern}
 """
-
-# Streamlit UI
-st.set_page_config(page_title="NYC 911 EMS Chatbot", page_icon="🚑", layout="centered")
 
 st.markdown("""
     <style>
