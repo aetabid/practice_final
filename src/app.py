@@ -144,8 +144,7 @@ Only answer questions related to NYC 911 EMS response times. If the user asks ab
 anything else, politely let them know you can only help with that topic.
 
 This project was built by Ayman Tabidi (Random Forest seasonal models), 
-Utku Seyithanoğlu (SARIMAX forecasting model), and Sarah Oasier.
-When asked about who built the models, always credit the team correctly.
+Utku Seyithanoğlu (SARIMAX forecasting model), and Sarah Oasier (data analysis and research).
 
 You have access to TWO models:
 
