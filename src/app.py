@@ -11,6 +11,7 @@ st.set_page_config(page_title="NYC EMS Dashboard + Chatbot", page_icon="🚑", l
 page = st.sidebar.radio("Go to", ["Dashboard", "Chatbot"])
 
 if page == "Dashboard":
+    # Header
     st.markdown("""
         <div style="background-color:#C0392B; padding:25px; border-radius:8px; margin-bottom:20px;">
             <h1 style="color:white; text-align:center;">🚑 NYC EMS Intelligence Platform</h1>
@@ -19,9 +20,8 @@ if page == "Dashboard":
             </p>
         </div>
     """, unsafe_allow_html=True)
-
     st.markdown("""
-        <div style="background-color:#F8F9FA; padding:20px; border-radius:8px; margin-bottom:10px; border-left: 5px solid #C0392B;">
+        <div style="background-color:#F8F9FA; padding:20px; border-radius:8px; margin-bottom:20px; border-left: 5px solid #C0392B;">
             <h3 style="color:#C0392B;">🎯 Our Goal</h3>
             <p style="font-size:15px; color:#333;">
                 Every second counts in an emergency. Our goal is to use machine learning to <strong>predict EMS response times</strong> 
@@ -46,19 +46,56 @@ if page == "Dashboard":
             </p>
         """, unsafe_allow_html=True)
 
+    st.divider()
+
+    st.markdown("### 🛠 Feature Engineering & Model Inputs")
+    geo_col, temp_col, incident_col, env_col = st.columns(4, gap="medium")
+
+    with geo_col:
+        st.markdown("**📍 Geographic & Infrastructure**")
+        st.write("- Borough\n- Zip Code\n- Dispatch Area\n- Distance to Closest Manhattan Station")
+
+    with temp_col:
+        st.markdown("**⏰ Temporal**")
+        st.write("- Hour\n- Day\n- Month\n- Weekend Indicator\n- Rush Hour Indicator\n- Holiday Indicator")
+
+    with incident_col:
+        st.markdown("**🚑 Incident Characteristics**")
+        st.write("- Initial Severity\n- Initial Call Type\n- Transferred\n- Held\n- Standby")
+
+    with env_col:
+        st.markdown("**🌦 Environmental Factors**")
+        st.write("- Temperature\n- Precipitation\n- Wind Speed\n- Weather Code\n- Special Events")
+
+    st.divider()
+
     st.markdown("### 📊 Raw Data: EMS Calls by Hour")
     hour_url = "https://public.tableau.com/views/Book1_17725767248200/Sheet1?:showVizHome=no"
     st.components.v1.iframe(hour_url, height=500, scrolling=True)
 
+    # Key insight under Hour chart
+    st.markdown("""
+    **Insight:** Peak EMS call hours occur between **4–8 PM**, corresponding to slightly longer response times.
+    """)
+    
     st.markdown("### 📊 Raw Data: EMS Calls by Month")
     bar_url = "https://public.tableau.com/views/barchart1_17725628862930/Sheet2?:showVizHome=no"
     st.components.v1.iframe(bar_url, height=500, scrolling=True)
 
+    # Key insight under Month chart
+    st.markdown("""
+    **Insight:** July has the **highest monthly call volume**, highlighting seasonal trends that affect response times.
+    """)
+
+    st.divider()
+
     st.markdown("### 📊 Demand & Response Intelligence Dashboard")
     st.markdown("This dashboard helps forecast emergency demand and response performance across NYC boroughs.")
     st.divider()
+
     tableau_url = "https://public.tableau.com/views/predictcallsbyborough/Dashboard2?:showVizHome=no"
     st.components.v1.iframe(tableau_url, height=1800, scrolling=True)
+
 
 if page == "Chatbot":
     st.title("🚑 NYC 911 EMS Response Time Assistant")
