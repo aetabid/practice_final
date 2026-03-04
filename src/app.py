@@ -3,6 +3,8 @@ import os
 import pickle
 import json
 import pandas as pd
+import matplotlib.pyplot as plt
+import calendar
 from openai import OpenAI
 from dotenv import load_dotenv
 import streamlit as st
@@ -11,7 +13,6 @@ st.set_page_config(page_title="NYC EMS Dashboard + Chatbot", page_icon="🚑", l
 page = st.sidebar.radio("Go to", ["Dashboard", "Chatbot"])
 
 if page == "Dashboard":
-    # Header
     st.markdown("""
         <div style="background-color:#C0392B; padding:25px; border-radius:8px; margin-bottom:20px;">
             <h1 style="color:white; text-align:center;">🚑 NYC EMS Intelligence Platform</h1>
@@ -20,6 +21,7 @@ if page == "Dashboard":
             </p>
         </div>
     """, unsafe_allow_html=True)
+
     st.markdown("""
         <div style="background-color:#F8F9FA; padding:20px; border-radius:8px; margin-bottom:20px; border-left: 5px solid #C0392B;">
             <h3 style="color:#C0392B;">🎯 Our Goal</h3>
@@ -72,19 +74,24 @@ if page == "Dashboard":
     st.markdown("### 📊 Raw Data: EMS Calls by Hour")
     hour_url = "https://public.tableau.com/views/Book1_17725767248200/Sheet1?:showVizHome=no"
     st.components.v1.iframe(hour_url, height=500, scrolling=True)
-
-    # Key insight under Hour chart
     st.markdown("""
     **Insight:** Peak EMS call hours occur between **4–8 PM**, corresponding to slightly longer response times.
     """)
-    
+
     st.markdown("### 📊 Raw Data: EMS Calls by Month")
     bar_url = "https://public.tableau.com/views/barchart1_17725628862930/Sheet2?:showVizHome=no"
     st.components.v1.iframe(bar_url, height=500, scrolling=True)
-
-    # Key insight under Month chart
     st.markdown("""
     **Insight:** July has the **highest monthly call volume**, highlighting seasonal trends that affect response times.
+    """)
+
+    st.divider()
+
+    st.markdown("### 📈 Monthly Actual vs Predicted Response Time")
+    monthly_pred_url = "https://public.tableau.com/views/Book3_17725944532590/Sheet1?:showVizHome=no"
+    st.components.v1.iframe(monthly_pred_url, height=500, scrolling=True)
+    st.markdown("""
+    **Insight:** The Random Forest model closely follows actual response times, with slight underestimation during peak demand periods.
     """)
 
     st.divider()
@@ -92,10 +99,9 @@ if page == "Dashboard":
     st.markdown("### 📊 Demand & Response Intelligence Dashboard")
     st.markdown("This dashboard helps forecast emergency demand and response performance across NYC boroughs.")
     st.divider()
-
     tableau_url = "https://public.tableau.com/views/predictcallsbyborough/Dashboard2?:showVizHome=no"
     st.components.v1.iframe(tableau_url, height=1800, scrolling=True)
-
+    st.divider()
 
 if page == "Chatbot":
     st.title("🚑 NYC 911 EMS Response Time Assistant")
@@ -122,6 +128,9 @@ if page == "Chatbot":
 
     models = load_models()
     hourly_df, monthly_df, rf_preds, df2 = load_all_data()
+
+    monthly_call_counts = monthly_df.groupby('month')['incident_count'].sum().to_dict()
+
 
     rf_preds['rf_pred_response_min'] = round(rf_preds['rf_pred_response_sec'] / 60, 2)
     hourly_pattern = rf_preds.groupby(rf_preds['datetime_hour'].str[11:13])['rf_pred_response_min'].mean().round(2).to_dict()
@@ -205,7 +214,11 @@ Common call type mappings:
 Average response time by borough (minutes): {borough_avg}
 Average response time by month: {monthly_summary}
 Total 911 calls by borough (Sep 2024 - Aug 2025): {total_calls}
-Total calls overall: {total_calls_overall}
+Total calls overall: {total_calls_overall} (September 2024 to August 2025)
+When asked how many total calls occurred, always state the total_calls_overall number.
+Monthly call counts (by month number 1-12): {monthly_call_counts}
+Month 1=January, 2=February, 3=March, 4=April, 5=May, 6=June, 7=July, 8=August, 9=September, 10=October, 11=November, 12=December.
+When asked about calls in a specific month, use these exact numbers.
 
 RF model hourly prediction summary:
 - Overall average predicted response time: {rf_avg} minutes
